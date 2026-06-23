@@ -13,7 +13,71 @@ datasource db {
 }
 
 model User {
-  id    String  @default(uuid())
-  email String  @unique
-  name  String?
+  id         String   @id @default(uuid())
+  username   String   @unique
+  password   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+  orders     Order[]
+  makerFills Fill[]   @relation("maker")
+  takerFills Fill[]   @relation("taker")
+}
+
+enum OrderType {
+  Market
+  Limit
+}
+
+enum Side {
+  Bid
+  Ask
+}
+
+model Market {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+enum OrderStatus {
+  Filled
+  PartiallyFilled
+  Cancelled
+  Open
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  marketId      String
+  orderType     OrderType
+  side          Side
+  price         String
+  slippage      Int
+  qty           String
+  initialMargin String
+  filledQty     String
+  status        OrderStatus
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt()
+  makerFills    Fill[]      @relation("maker")
+  takerFills    Fill[]      @relation("taker")
+  user          User        @relation(fields: [userId], references: [id])
+}
+
+model Fill {
+  id           String   @id @default(uuid())
+  makerId      String
+  takerId      String
+  qty          String
+  price        String
+  makerOrderId String
+  takerOrderId String
+  marketId     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt()
+  makerOrder   Order    @relation("maker", fields: [makerOrderId], references: [id])
+  takerOrder   Order    @relation("taker", fields: [takerOrderId], references: [id])
+  makerUser    User     @relation("maker", fields: [makerId], references: [id])
+  takerUser    User     @relation("taker", fields: [takerId], references: [id])
 }

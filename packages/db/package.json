@@ -6,6 +6,9 @@
   "exports": {
     "./prisma": "./index.ts"
   },
+  "scripts": {
+    "dev": "bun index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/pg": "^8.20.0",
