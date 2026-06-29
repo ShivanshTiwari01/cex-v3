@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "cex-v3",
+      "name": "stock-exchange",
       "devDependencies": {
         "prettier": "^3.7.4",
         "turbo": "^2.9.14",
