@@ -3,6 +3,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import cors from 'cors';
+import router from './src/routes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -31,6 +32,8 @@ app.use((req, res, next) => {
 app.get('/', async (req, res) => {
   res.send('UNAUTHORIZED');
 });
+
+app.use('/api/v1', router);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);
