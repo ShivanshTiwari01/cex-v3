@@ -42,7 +42,10 @@ export const register = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: 'user created successfully',
-      data: user,
+      data: {
+        userId: user.id,
+        username,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -78,7 +81,7 @@ export const signIn = async (req: Request, res: Response) => {
       });
     }
 
-    const passwordMatch = bcrypt.compare(password, userExists.password!);
+    const passwordMatch = await bcrypt.compare(password, userExists.password!);
 
     if (!passwordMatch) {
       return res.status(401).json({
@@ -90,7 +93,10 @@ export const signIn = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'User logged in succesfully',
-      data: userExists,
+      data: {
+        userId: userExists.id,
+        username,
+      },
     });
   } catch (error) {
     return res.status(500).json({
